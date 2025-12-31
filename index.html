@@ -8,49 +8,85 @@
         body {
             margin: 0; padding: 0;
             background-color: #000;
+            color: white; font-family: 'Arial', sans-serif;
             height: 100vh; overflow: hidden;
             display: flex; justify-content: center; align-items: center;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             transition: background-color 3s ease;
         }
 
-        .snow {
-            position: absolute; top: -10px; color: white;
-            user-select: none; z-index: 2;
-            animation: fall linear forwards;
-        }
-        @keyframes fall {
-            to { transform: translateY(105vh); }
-        }
-
-        #celebration-scene {
+        #bg-scene {
             position: absolute; width: 100%; height: 100%;
-            display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
+            background: linear-gradient(to bottom, #1a2a6c, #b21f1f, #fdbb2d);
             opacity: 0; transition: opacity 3s ease;
-            z-index: 1;
-            background: radial-gradient(circle, #1a2a6c, #b21f1f, #fdbb2d);
+            z-index: 1; display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
         }
 
-        h1 { font-size: 6rem; color: #fff; text-shadow: 0 0 20px gold; margin: 0; }
-        h2 { font-size: 2.5rem; color: #fff; margin-top: 10px; }
-        .snowman { font-size: 100px; margin-bottom: 20px; }
+        .snow { position: absolute; top: -10px; color: white; animation: fall linear infinite; }
+        @keyframes fall { to { transform: translateY(110vh); } }
 
-        #box-container {
-            position: relative; z-index: 10;
-            text-align: center; cursor: pointer;
-        }
-        #gift-box { font-size: 120px; display: inline-block; }
-        #click-hint { color: #888; margin-top: 15px; font-weight: bold; font-size: 1.2rem; }
-
-        /* Sallanma Efekti */
-        .shake { animation: shake 0.4s ease-in-out; }
-        @keyframes shake {
-            0% { transform: rotate(0); }
-            20% { transform: rotate(15deg); }
-            40% { transform: rotate(-15deg); }
-            60% { transform: rotate(10deg); }
-            80% { transform: rotate(-10deg); }
-            100% { transform: rotate(0); }
-        }
+        #box-container { z-index: 10; cursor: pointer; text-align: center; }
+        .gift { font-size: 120px; transition: transform 0.3s; }
+        
+        h1 { font-size: 4rem; text-shadow: 0 0 20px rgba(255,255,255,0.8); margin: 10px; }
+        .snowman { font-size: 80px; }
     </style>
+</head>
+<body>
+
+    <div id="bg-scene">
+        <div class="snowman">☃️</div>
+        <h1>2026</h1>
+        <h2>Mutlu Yıllar Dostlarım!</h2>
+    </div>
+
+    <div id="box-container">
+        <div id="main-gift" class="gift">🎁</div>
+        <p id="hint">Sürprizi açmak için tıklat! (Kalan: 10)</p>
+    </div>
+
+    <script>
+        let clickCount = 0;
+        const gift = document.getElementById('main-gift');
+        const hint = document.getElementById('hint');
+        const bg = document.getElementById('bg-scene');
+
+        function createSnow() {
+            const snowflake = document.createElement('div');
+            snowflake.className = 'snow';
+            snowflake.innerText = '❄';
+            snowflake.style.left = Math.random() * 100 + 'vw';
+            snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
+            snowflake.style.opacity = Math.random();
+            document.body.appendChild(snowflake);
+            setTimeout(() => snowflake.remove(), 5000);
+        }
+
+        gift.addEventListener('click', () => {
+            clickCount++;
+            
+            if (clickCount < 10) {
+                gift.style.transform = "rotate(15deg)";
+                setTimeout(() => gift.style.transform = "rotate(-15deg)", 100);
+                setTimeout(() => gift.style.transform = "rotate(0deg)", 200);
+                hint.innerText = `Sürprizi açmak için tıklat! (Kalan: ${10 - clickCount})`;
+            } 
+            else if (clickCount === 10) {
+                hint.style.display = 'none';
+                gift.innerHTML = '🎊';
+                gift.style.transform = "scale(2)";
+                gift.style.opacity = "0";
+                
+                document.body.style.backgroundColor = "#fff";
+                bg.style.opacity = "1";
+                
+                setInterval(createSnow, 100);
+                
+                setTimeout(() => {
+                    gift.parentElement.style.display = 'none';
+                }, 1000);
+            }
+        });
+    </script>
+</body>
+</html>
