@@ -5,17 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mutlu Yıllar 2026</title>
     <style>
-        /* Genel Tasarım */
         body {
             margin: 0; padding: 0;
-            background-color: #000; /* Başlangıçta karanlık */
+            background-color: #000;
             height: 100vh; overflow: hidden;
             display: flex; justify-content: center; align-items: center;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            transition: background-color 3s ease; /* Aydınlanma hızı */
+            transition: background-color 3s ease;
         }
 
-        /* Kar Yağışı */
         .snow {
             position: absolute; top: -10px; color: white;
             user-select: none; z-index: 2;
@@ -25,7 +23,6 @@
             to { transform: translateY(105vh); }
         }
 
-        /* Arkaplan Sahnesi (Başta gizli) */
         #celebration-scene {
             position: absolute; width: 100%; height: 100%;
             display: flex; flex-direction: column;
@@ -39,89 +36,21 @@
         h2 { font-size: 2.5rem; color: #fff; margin-top: 10px; }
         .snowman { font-size: 100px; margin-bottom: 20px; }
 
-        /* Hediye Kutusu */
         #box-container {
             position: relative; z-index: 10;
             text-align: center; cursor: pointer;
         }
-        #gift-box { font-size: 120px; transition: transform 0.2s; }
-        #click-hint { color: #555; margin-top: 15px; font-weight: bold; }
+        #gift-box { font-size: 120px; display: inline-block; }
+        #click-hint { color: #888; margin-top: 15px; font-weight: bold; font-size: 1.2rem; }
 
-        /* Kutunun sarsılma efekti */
-        .shake { animation: shake 0.3s ease-in-out; }
+        /* Sallanma Efekti */
+        .shake { animation: shake 0.4s ease-in-out; }
         @keyframes shake {
             0% { transform: rotate(0); }
-            25% { transform: rotate(10deg); }
-            50% { transform: rotate(-10deg); }
+            20% { transform: rotate(15deg); }
+            40% { transform: rotate(-15deg); }
+            60% { transform: rotate(10deg); }
+            80% { transform: rotate(-10deg); }
             100% { transform: rotate(0); }
         }
     </style>
-</head>
-<body>
-
-    <div id="celebration-scene">
-        <div class="snowman">☃️</div>
-        <h1>2026</h1>
-        <h2>Mutlu Yıllar Dostlarım!</h2>
-    </div>
-
-    <div id="box-container">
-        <div id="gift-box">🎁</div>
-        <p id="click-hint">Açmak için tıkla! (3 tık kaldı)</p>
-    </div>
-
-    <script>
-        let count = 0;
-        const gift = document.getElementById('gift-box');
-        const hint = document.getElementById('click-hint');
-        const scene = document.getElementById('celebration-scene');
-        const body = document.body;
-
-        // Kar yağdırma fonksiyonu
-        function createSnowflake() {
-            const snowflake = document.createElement('div');
-            snowflake.className = 'snow';
-            snowflake.innerHTML = '❄';
-            snowflake.style.left = Math.random() * 100 + 'vw';
-            snowflake.style.fontSize = (Math.random() * 1.5 + 0.5) + 'rem';
-            snowflake.style.animationDuration = (Math.random() * 3 + 2) + 's';
-            snowflake.style.opacity = Math.random();
-            document.body.appendChild(snowflake);
-            setTimeout(() => snowflake.remove(), 5000);
-        }
-
-        gift.addEventListener('click', () => {
-            count++;
-            
-            // Her tıklandığında kutu sallansın
-            gift.classList.remove('shake');
-            void gift.offsetWidth; // Animasyonu resetlemek için
-            gift.classList.add('shake');
-
-            if (count < 3) {
-                hint.innerText = `Açmak için tıkla! (${3 - count} tık kaldı)`;
-            } 
-            else if (count === 3) {
-                // SÜRPRİZ BAŞLIYOR
-                hint.style.display = 'none';
-                gift.innerHTML = '🎊';
-                gift.style.transform = "scale(2)";
-                gift.style.opacity = "0";
-                gift.style.transition = "all 1s ease";
-
-                // Karanlığı aç, sahneyi getir
-                body.style.backgroundColor = "#fff"; // Aydınlanma
-                scene.style.opacity = "1";
-
-                // Kar yağışını başlat
-                setInterval(createSnowflake, 100);
-
-                // 1 saniye sonra kutuyu tamamen kaldır
-                setTimeout(() => {
-                    document.getElementById('box-container').style.display = 'none';
-                }, 1000);
-            }
-        });
-    </script>
-</body>
-</html>
